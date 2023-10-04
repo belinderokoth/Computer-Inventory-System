@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link href="{% static 'css/bootstrap.min.css'  %}" rel="stylesheet">
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <h1 class="title">{{title}}</h1>
+    <h1>{{ title }}</h1>
+    <table border="1">
+        <thead>
+            <th>#</th>
+            <th>PC NAME</th>
+            <th>MAC ADDR</th>
+            <th>IP ADDRESS</th>
+            <th>USER’S NAME</th>
+            <th>LOCATION</th>
+            <th>ACTION</th>
+        </thead>
+        {% for instance in queryset %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href="{% url 'edit' id=instance.id %}">{{ instance.computer_name }}</a></td>
+            <td>{{ instance.MAC_address }}</td>
+            <td>{{ instance.IP_address }}</td>
+            <td>{{ instance.users_name }}</td>
+            <td>{{ instance.location }}</td>
+            <td>
+                <a href="{% url 'delete' id=instance.id %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
