@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),  # Map the root path to the home view
     path('computer_entry/', computer_entry, name='computer_entry'),
+    path('add_os/', add_os, name='add_os'),
     path('list/',  computer_list, name='list'),
     path('list/<str:id>/',computer_edit, name='edit'),
     path('list/<int:id>/delete/',computer_delete, name='delete'),

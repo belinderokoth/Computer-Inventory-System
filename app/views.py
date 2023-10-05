@@ -42,6 +42,19 @@ def computer_entry(request):
     }
     return render(request, "computer_entry.html", context)
 
+def add_os(request):
+    title = 'Add Operating System'
+    form = OSForm()
+    context={
+        'form':form
+    }
+    if request.method == 'POST':
+        form = OSForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('computer_entry')
+    return render(request, "add_os.html", context)
+
 
 def computer_list(request):
     title = 'List of all computers'
