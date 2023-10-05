@@ -11,6 +11,12 @@
 <body>
     <h1 class="title">{{title}}</h1>
     <h1>{{ title }}</h1>
+
+    <form method="post" action="">
+        {% csrf_token %} {{ form }}
+        <input class="btn btn-primary" type="submit" value="Search" />
+    </form>
+
     <table border="1">
         <thead>
             <th>#</th>

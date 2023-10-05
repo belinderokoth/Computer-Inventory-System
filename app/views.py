@@ -1,6 +1,6 @@
 from django.shortcuts import render,  redirect, get_object_or_404
 from .models import Computer
-from .forms import ComputerForm
+from .forms import *
 
 # Create your views here.
 # views.py
@@ -46,10 +46,26 @@ def computer_entry(request):
 def computer_list(request):
     title = 'List of all computers'
     queryset = Computer.objects.all()
+    form = ComputerSearchForm(request.POST or None)
+
     context = {
         "title": title,
         "queryset": queryset,
+        "form":form
     }
+
+    if request.method == 'POST' :
+        form = ComputerSearchForm(request.POST)
+        queryset = Computer.objects.filter(
+            computer_name__icontains=form['computer_name'].value(),
+            users_name__icontains=form['users_name'].value(),
+        )
+        context = {
+            "title": title,
+            "queryset": queryset,
+            "form":form
+        }
+    
     return render(request, "list.html", context)
 
 def computer_delete(request, id=None):
