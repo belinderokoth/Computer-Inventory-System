@@ -17,7 +17,7 @@
     <form method="post" action="">
         {% csrf_token %} {{ form.as_p }}
         <input type="submit" value="Save" />
-        <a class="btn btn-info" href="{% url 'add_os' %}">Add Operating System</a>
+        <a class="btn btn-info" href="{% url 'add_os' %}"></a>
         <script src="{% static 'js/jquery-3.4.0.min.js' %}"></script>
         <script src="{% static 'js/jquery-ui-1.12.1/jquery-ui.js' %}"></script>
         <script src="{% static 'js/custom.js' %}"></script>

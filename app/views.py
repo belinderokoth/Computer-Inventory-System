@@ -1,5 +1,10 @@
 from django.shortcuts import render,  redirect, get_object_or_404
 from .models import Computer
+from django.contrib import messages
+from django.http import HttpResponse
+import csv
+
+
 from .forms import *
 
 # Create your views here.
@@ -12,6 +17,8 @@ def computer_edit(request, id=None):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        form.save_m2m()
+        messages.success(request, "updated successfully")
         return redirect('list')
 
     context = {
@@ -34,6 +41,8 @@ def computer_entry(request):
     form = ComputerForm(request.POST or None)
     if form.is_valid():
         form.save()
+        form.save_m2m()
+        messages.success(request, 'Successfully Saved')
         return redirect('list')
     context = {
         "title": title,
@@ -52,6 +61,8 @@ def add_os(request):
         form = OSForm(request.POST)
         if form.is_valid():
             form.save()
+            form.save_m2m()
+            messages.success(request, 'Successfully Saved')
             return redirect('computer_entry')
     return render(request, "add_os.html", context)
 
@@ -59,32 +70,38 @@ def add_os(request):
 def computer_list(request):
     title = 'List of all computers'
     queryset = Computer.objects.all()
-    form = ComputerSearchForm(request.POST or None)
-
-    context = {
-        "title": title,
-        "queryset": queryset,
-        "form":form
-    }
+    form = ComputerSearchForm()
 
     if request.method == 'POST' :
-        form = ComputerSearchForm(request.POST)
+        form = ComputerSearchForm(request.POST or None)
         queryset = Computer.objects.filter(
             computer_name__icontains=form['computer_name'].value(),
             users_name__icontains=form['users_name'].value(),
+            
         )
-        context = {
+
+    if form['export_to_CSV'].value() == True:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="Computer list.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['COMPUTER NAME', 'IP Address', 'MAC ADDRESS', 'USERNAME', 'LOCATION', 'PURCHASE DATE', 'TIMESTAMP'])
+        instance = queryset
+
+        for row in instance:
+            writer.writerow([row.computer_name,       
+            row.IP_address, row.MAC_address, row.users_name, row.location, row.purchase_date, row.timestamp])
+        return response
+        
+
+    context = {
             "title": title,
             "queryset": queryset,
             "form":form
         }
-    
+
     return render(request, "list.html", context)
 
 def computer_delete(request, id=None):
     instance = get_object_or_404(Computer, id=id)
     instance.delete()
     return redirect("list")
-
-
-

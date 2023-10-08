@@ -12,6 +12,14 @@
     <h1 class="title">{{title}}</h1>
     <h1>{{ title }}</h1>
 
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %}
+
     <form method="post" action="">
         {% csrf_token %} {{ form }}
         <input class="btn btn-primary" type="submit" value="Search" />

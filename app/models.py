@@ -15,9 +15,9 @@ class Computer(models.Model):
     location = models.CharField(max_length=30)
     purchase_date = models.DateField("Purchase Date (mm/dd/yyyy)", auto_now_add=False, auto_now=False, blank=True, null=True)
     timestamp = models.DateField(auto_now_add=True, auto_now=False)
-    operating_system = models.ForeignKey(operating_system, on_delete=models.CASCADE,blank=True, null=True)
+    operating_system =  models.ManyToManyField(operating_system, blank=True)
+    export_to_CSV = models.BooleanField(default=False)
     
-
 def __str__(self):
     return self.computer_name
 
